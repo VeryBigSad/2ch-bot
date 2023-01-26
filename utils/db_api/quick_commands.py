@@ -1,5 +1,9 @@
+from datetime import datetime, timedelta
+
 from asyncpg import UniqueViolationError
 
+from utils.db_api.db_gino import db
+from utils.db_api.models.message import Message
 from utils.db_api.models.user import User
 
 
@@ -31,7 +35,7 @@ async def select_user(user_id):
     return user
 
 
-async def update_user_status(user_id, status: bool):
+async def update_user_status(user_id, status):
     user = await select_user(user_id)
     await user.update(status=status).apply()
 
@@ -39,3 +43,32 @@ async def update_user_status(user_id, status: bool):
 async def delete_user(user_id):
     user = await select_user(user_id)
     await user.delete()
+
+
+async def add_message(user_id: int, original_id: int, message_id: int):
+    try:
+        message = Message(user_id=user_id, original_id=original_id, message_id=message_id)
+        await message.create()
+    except UniqueViolationError:
+        print('Message creation error')
+
+
+async def get_original_message(user_id, message_id):
+    message = await Message.query.where(Message.user_id == user_id).where(
+        Message.message_id == message_id).gino.first()
+    return message.original_id
+
+
+async def get_replied_message(user_id, original_id):
+    message = await Message.query.where(Message.user_id == user_id).where(
+        Message.original_id == original_id).gino.first()
+    return message.message_id
+
+
+async def refresh_messages():
+    messages = await Message.query.where(Message.created_at < (datetime.now() - timedelta(days=1))).gino.all()
+    for message in messages:
+        await message.delete()
+
+    while await db.func.count(Message.id).gino.scalar() > 10000:
+        await Message.query.sort(Message.created_at).last().delete()

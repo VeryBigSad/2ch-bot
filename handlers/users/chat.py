@@ -1,7 +1,6 @@
 from aiogram import types
 from aiogram.types import ContentType
 
-from data.config import ADMIN_ID
 from loader import dp, bot
 from utils.db_api import quick_commands as commands
 
@@ -16,22 +15,33 @@ async def chat(message: types.Message):
 
     if status is True:
         try:
+            await commands.add_message(message.from_user.id, message.message_id, message.message_id)
             users = await commands.select_all_active_users(message.from_user.id)
-            replied_message = None
+            original_id = None
 
             if message.reply_to_message:
-                replied_message = await bot.copy_message(chat_id=ADMIN_ID, from_chat_id=message.from_user.id,
-                                                         message_id=message.reply_to_message.message_id)
+                try:
+                    original_id = await commands.get_original_message(message.from_user.id,
+                                                                      message.reply_to_message.message_id)
+                except Exception:
+                    await message.answer('Replied message is too old!')
+
             for user in users:
-                if message.reply_to_message:
-                    await bot.forward_message(chat_id=user.user_id, from_chat_id=ADMIN_ID,
-                                              message_id=replied_message.message_id)
-                await bot.copy_message(chat_id=user.user_id, from_chat_id=message.from_user.id,
-                                       message_id=message.message_id)
+                try:
+                    replied_id = None
 
-            if message.reply_to_message:
-                await bot.delete_message(chat_id=ADMIN_ID, message_id=replied_message.message_id)
+                    if message.reply_to_message:
+                        replied_id = await commands.get_replied_message(user.user_id, original_id)
+
+                    copied_message = await bot.copy_message(chat_id=user.user_id, from_chat_id=message.from_user.id,
+                                                            message_id=message.message_id,
+                                                            reply_to_message_id=replied_id)
+                    await commands.add_message(user.user_id, message.message_id, copied_message.message_id)
+                except Exception:
+                    print('Copying error')
+
+            await commands.refresh_messages()
         except Exception:
-            print('Copying error')
+            print('Chat handler error')
     else:
         await message.answer('Press /enter to enter the chat')

@@ -8,8 +8,6 @@ BOT_TOKEN = str(os.getenv("BOT_TOKEN"))
 
 GROUP_ID = str(os.getenv("GROUP_ID"))
 
-ADMIN_ID = str(os.getenv("ADMIN_ID"))
-
 IP = os.getenv('IP')
 POSTGRES_USER = str(os.getenv('POSTGRES_USER'))
 POSTGRES_PASSWORD = str(os.getenv('POSTGRES_PASSWORD'))
