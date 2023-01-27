@@ -71,4 +71,5 @@ async def refresh_messages():
         await message.delete()
 
     while await db.func.count(Message.id).gino.scalar() > 10000:
-        await Message.query.sort(Message.created_at).last().delete()
+        message = await Message.query.gino.first()
+        await message.delete()
