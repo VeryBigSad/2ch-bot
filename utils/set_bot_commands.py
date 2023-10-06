@@ -8,4 +8,5 @@ async def set_default_commands(dp):
         types.BotCommand('exit', 'выйти из чата'),
         types.BotCommand('help', 'помощь'),
         types.BotCommand('ban', 'забанить пользователя'),
+        types.BotCommand('unban', 'раззабанить пользователя'),
     ])

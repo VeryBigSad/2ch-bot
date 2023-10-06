@@ -35,6 +35,11 @@ async def select_all_users():
     return users
 
 
+async def is_admin(user_id):
+    user = await User.query.where(User.user_id == user_id).gino.first()
+    return user.is_admin
+
+
 async def select_all_active_users(user_id):
     users = await User.query.where(User.status == True).where(User.user_id != user_id).gino.all()
     return users
