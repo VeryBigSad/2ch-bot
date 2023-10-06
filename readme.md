@@ -1,0 +1,3 @@
+# 2ch Telegram bot
+
+this readme is yet to be written...
