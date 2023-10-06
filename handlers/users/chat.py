@@ -1,5 +1,6 @@
 from aiogram import types
 from aiogram.types import ContentType
+from data.config import ALLOW_GIFS
 
 from loader import dp, bot
 from utils.db_api import quick_commands as commands
@@ -11,7 +12,17 @@ async def chat(message: types.Message):
     try:
         status = await commands.get_user_status(message.from_user.id)
     except Exception:
-        await message.answer('Press /start to register')
+        await message.answer('Нажми /start чтобы зарегистрироваться')
+
+    # if it's a gif, we don't want to copy it
+    if message.content_type == 'animation' and not ALLOW_GIFS:
+        await message.answer('Пока без гифок :(')
+        return
+
+    is_banned = await commands.is_banned(message.from_user.id)
+    if is_banned:
+        await message.answer('Вы забанены :(\nНаверное, вы вели себя очень плохо...')
+        return
 
     if status is True:
         try:
@@ -24,7 +35,7 @@ async def chat(message: types.Message):
                     original_id = await commands.get_original_message(message.from_user.id,
                                                                       message.reply_to_message.message_id)
                 except Exception:
-                    await message.answer('Replied message is too old!')
+                    await message.answer('Это сообщение слишком старое!')
 
             for user in users:
                 try:
@@ -44,4 +55,4 @@ async def chat(message: types.Message):
         except Exception:
             print('Chat handler error')
     else:
-        await message.answer('Press /enter to enter the chat')
+        await message.answer('Напиши /enter чтобы зайти в чат')

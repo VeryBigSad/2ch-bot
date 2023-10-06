@@ -8,5 +8,7 @@ class User(TimedBaseModel):
 
     user_id = Column(BigInteger, primary_key=True)
     status = Column(Boolean, default=False)
+    is_banned = Column(Boolean, default=False)
+    is_admin = Column(Boolean, default=False)
 
     query: sql.select

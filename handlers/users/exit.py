@@ -8,7 +8,7 @@ from utils.db_api import quick_commands as commands
 async def exit_command(message: types.Message):
     try:
         await commands.update_user_status(message.from_user.id, False)
-        await message.answer('You exited from chat')
+        await message.answer('Вы вышли из чата')
     except Exception:
-        await message.answer('Press /start to register')
+        await message.answer('Напиши /start чтобы зарегистрироваться')
         print('Status update error')

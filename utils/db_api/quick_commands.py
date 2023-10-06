@@ -20,6 +20,16 @@ async def get_user_status(user_id):
     return user.status
 
 
+async def is_banned(user_id):
+    user = await User.query.where(User.user_id == user_id).gino.first()
+    return user.is_banned
+
+
+async def set_is_banned(user_id, is_banned):
+    user = await User.query.where(User.user_id == user_id).gino.first()
+    await user.update(is_banned=is_banned).apply()
+
+
 async def select_all_users():
     users = await User.query.gino.all()
     return users

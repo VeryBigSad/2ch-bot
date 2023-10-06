@@ -8,6 +8,6 @@ from utils.db_api import quick_commands as commands
 async def start_command(message: types.Message):
     try:
         await commands.add_user(int(message.from_user.id))
-        await message.answer('Welcome to Inno2ch!\nPress /enter to enter to chat\nPress /help for help')
+        await message.answer('Добро пожаловать в sch58 2ch! Все твои сообщения анонимны.\n/enter чтобы зайти в чат\n/help чтобы узнать команды')
     except Exception:
         print("User adding error")

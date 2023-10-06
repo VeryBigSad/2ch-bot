@@ -8,7 +8,7 @@ from utils.db_api import quick_commands as commands
 async def enter_command(message: types.Message):
     try:
         await commands.update_user_status(message.from_user.id, True)
-        await message.answer('You entered to chat')
+        await message.answer('Вы зашли в чат')
     except Exception:
-        await message.answer('Press /start to register')
+        await message.answer('Напиши /start чтобы зарегистрироваться')
         print('Status update error')

@@ -13,4 +13,6 @@ POSTGRES_USER = str(os.getenv('POSTGRES_USER'))
 POSTGRES_PASSWORD = str(os.getenv('POSTGRES_PASSWORD'))
 DATABASE = str(os.getenv('DATABASE'))
 
+ALLOW_GIFS = os.getenv('ALLOW_GIFS', False) in ["True", "true", "1"]
+
 POSTGRES_URI = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{IP}/{DATABASE}'
