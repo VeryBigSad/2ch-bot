@@ -14,7 +14,6 @@ async def chat(message: types.Message):
     except Exception:
         await message.answer('Нажми /start чтобы зарегистрироваться')
 
-    # if it's a gif, we don't want to copy it
     if message.content_type == 'animation' and not ALLOW_GIFS:
         await message.answer('Пока без гифок :(')
         return
@@ -32,8 +31,10 @@ async def chat(message: types.Message):
 
             if message.reply_to_message:
                 try:
-                    original_id = await commands.get_original_message(message.from_user.id,
-                                                                      message.reply_to_message.message_id)
+                    original_id = await commands.get_original_message(
+                        message.from_user.id,
+                        message.reply_to_message.message_id
+                    )
                 except Exception:
                     await message.answer('Это сообщение слишком старое!')
 
@@ -44,9 +45,12 @@ async def chat(message: types.Message):
                     if message.reply_to_message:
                         replied_id = await commands.get_replied_message(user.user_id, original_id)
 
-                    copied_message = await bot.copy_message(chat_id=user.user_id, from_chat_id=message.from_user.id,
-                                                            message_id=message.message_id,
-                                                            reply_to_message_id=replied_id)
+                    copied_message = await bot.copy_message(
+                        chat_id=user.user_id,
+                        from_chat_id=message.from_user.id,
+                        message_id=message.message_id,
+                        reply_to_message_id=replied_id
+                    )
                     await commands.add_message(user.user_id, message.message_id, copied_message.message_id)
                 except Exception:
                     print('Copying error')

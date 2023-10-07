@@ -81,10 +81,11 @@ async def get_replied_message(user_id, original_id):
 
 
 async def refresh_messages():
-    messages = await Message.query.where(Message.created_at < (datetime.now() - timedelta(days=1))).gino.all()
-    for message in messages:
-        await message.delete()
+    pass
+    # messages = await Message.query.where(Message.created_at < (datetime.now() - timedelta(days=1))).gino.all()
+    # for message in messages:
+    #     await message.delete()
 
-    while await db.func.count(Message.id).gino.scalar() > 10000:
-        message = await Message.query.gino.first()
-        await message.delete()
+    # while await db.func.count(Message.id).gino.scalar() > 10000:
+    #     message = await Message.query.gino.first()
+    #     await message.delete()
