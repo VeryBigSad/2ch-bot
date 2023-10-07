@@ -80,6 +80,12 @@ async def get_replied_message(user_id, original_id):
     return message.message_id
 
 
+async def get_replied_message_creator(user_id, original_id):
+    message = await Message.query.where(Message.user_id == user_id).where(
+        Message.original_id == original_id).gino.first()
+    return message.user_id
+
+
 async def refresh_messages():
     pass
     # messages = await Message.query.where(Message.created_at < (datetime.now() - timedelta(days=1))).gino.all()
