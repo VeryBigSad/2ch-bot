@@ -80,9 +80,9 @@ async def get_replied_message(user_id, original_id):
     return message.message_id
 
 
-async def get_replied_message_creator(user_id, original_id):
+async def get_replied_message_creator(user_id, message_id):
     message = await Message.query.where(Message.user_id == user_id).where(
-        Message.original_id == original_id).gino.first()
+        Message.message_id == message_id).gino.first()
     return message.user_id
 
 
