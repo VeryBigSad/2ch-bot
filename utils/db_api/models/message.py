@@ -4,7 +4,7 @@ from utils.db_api.db_gino import TimedBaseModel
 
 
 class Message(TimedBaseModel):
-    __tablename__ = 'messages'
+    __tablename__ = "messages"
 
     id = Column(BigInteger, primary_key=True)
     user_id = Column(BigInteger)

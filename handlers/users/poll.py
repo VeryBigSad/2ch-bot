@@ -13,6 +13,10 @@ async def poll(message: types.Message):
         users = await commands.select_all_active_users(message.from_user.id)
 
         for user in users:
-            await bot.forward_message(chat_id=user.user_id, from_chat_id=GROUP_ID, message_id=copied_poll.message_id)
+            await bot.forward_message(
+                chat_id=user.user_id,
+                from_chat_id=GROUP_ID,
+                message_id=copied_poll.message_id,
+            )
     except Exception:
-        print('Poll copying error')
+        print("Poll copying error")

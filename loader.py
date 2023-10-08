@@ -7,4 +7,4 @@ bot = Bot(token=config.BOT_TOKEN, parse_mode=types.ParseMode.HTML)
 
 dp = Dispatcher(bot)
 
-__all__ = ['bot', 'dp', 'db']
+__all__ = ["bot", "dp", "db"]
