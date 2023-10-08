@@ -12,6 +12,7 @@ async def ban_command(message: types.Message):
         replied_user_id = await commands.get_replied_message_creator(user_id, message.reply_to_message.message_id)
         await commands.set_is_banned(replied_user_id, True)
         await message.answer("Пользователь забанен")
+        await message.bot.send_message(replied_user_id, "Ты забанен :(")
     else:
         await message.answer("Ты без прав :(")
 
@@ -24,5 +25,6 @@ async def ban_command(message: types.Message):
         replied_user_id = await commands.get_replied_message_creator(user_id, message.reply_to_message.message_id)
         await commands.set_is_banned(replied_user_id, False)
         await message.answer("Пользователь разбанен")
+        await message.bot.send_message(replied_user_id, "Ты разбанен!!")
     else:
         await message.answer("Ты без прав :(")
